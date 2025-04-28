@@ -1,8 +1,8 @@
 "use client"
-import React, { useState } from 'react'
+import { useState } from 'react'
 import Link from 'next/link';
 
-function page() {
+export default function RegisterPage() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [rePassword, setRepassword] = useState("");
@@ -73,11 +73,11 @@ function page() {
           </div>
 
           <div>
-            <label className="block text-sm font-medium text-gray-300 mb-1">Select Role</label>
+            <label className="hidden text-sm font-medium text-gray-300 mb-1">Select Role</label>
             <select
               value={role}
               onChange={(e) => setRole(e.target.value)}
-              className="w-full border border-gray-300 rounded-md p-2 focus:outline-none focus:ring-2 focus:ring-sky-400 text-white bg-amber-950 "
+              className="hidden w-full border border-gray-300 rounded-md p-2 focus:outline-none focus:ring-2 focus:ring-sky-400 text-white bg-amber-950 "
             >
               <option value="customer">Customer</option>
               <option value="owner">Owner</option>
@@ -101,7 +101,4 @@ function page() {
       </div>
     </div>
   )
-}
-
-export default page
-
+};

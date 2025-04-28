@@ -25,8 +25,8 @@ const BookSecOne = () => {
   ];
   return (
     <div className="py-12 bg-gradient-to-r from-gray-800 to-purple-800 text-center">
-      <h2 className="text-3xl font-bold text-white">Book Our Services Now</h2>
-      <div className="mt-6 grid grid-cols-1 md:grid-cols-2 gap-6 max-w-2xl mx-auto px-4">
+      <h2 className="text-3xl font-bold text-white" data-aos="fade-right">Book Our Services Now</h2>
+      <div className="mt-6 grid grid-cols-1 md:grid-cols-2 gap-6 max-w-2xl mx-auto px-4" data-aos="fade-down">
         {services.map((service, index) => (
           <div
             key={index}

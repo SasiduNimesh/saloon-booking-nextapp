@@ -3,10 +3,17 @@ import { useSession } from 'next-auth/react';
 import React, { useEffect, useState } from 'react'
 import { FaPen } from 'react-icons/fa';
 
+interface Notice {
+  nid: number;
+  message: string;
+}
+
 const DashboardDis = () => {
   const [serviceCount, setServiceCount] = useState(0);
   const [customerCount, setCustomerCount] = useState(0);
   const [bookingCount, setBookingCount] = useState(0);
+  const [notices, setNotices] = useState<Notice[]>([]);
+  const [newNotice, setNewNotice] = useState<string>("");
 
   const { data: session, status } = useSession();
   const isOwner = status === "authenticated" && session?.user?.role === "owner";
@@ -42,36 +49,64 @@ const DashboardDis = () => {
     }
   }
 
+  const fetchNotices = async () => {
+    try {
+      const response = await fetch('/api/notices');
+      const data = await response.json();
+      setNotices(data);
+    } catch (error) {
+      console.error('Failed to fetch notices:', error);
+    }
+  };
+
+  const handleAddNotice = async () => {
+    if (newNotice.trim()) {
+      try {
+        const res = await fetch('/api/notices', {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ message: newNotice })
+        });
+        if (res.ok) {
+          setNewNotice("");
+          fetchNotices(); 
+        }
+      } catch (error) {
+        console.error('Failed to add notice:', error);
+      }
+    }
+  };
+  
+  const handleDeleteNotice = async (nid: number) => {
+    try {
+      const res = await fetch(`/api/notices/${nid}`, {
+        method: "DELETE",
+      });
+      if (res.ok) {
+        // No need to do res.json()
+        fetchNotices(); // Just refresh notices
+      } else {
+        console.error('Failed to delete notice:', await res.text()); // Optional: show error text
+      }
+    } catch (error) {
+      console.error('Failed to delete notice:', error);
+    }
+  };
+  
+
+
   useEffect(() => {
     fetchServiceCount();
     fetchCustomerCount();
     fetchBookingCount();
+    fetchNotices();
   },[]);
 
   const sumaries = [
     { title: 'Available Services', value: serviceCount },
     { title: 'Total Bookings', value: bookingCount },
     { title: 'Registered Customers', value: customerCount },
-  ];
-
-  const [notices, setNotices] = useState<string[]>([
-    "We are closed on Poya Days",
-    "Please arrive 10 minutes early to your appointment",
-  ]);
-
-  const [newNotice, setNewNotice] = useState<string>("");
-
-  const handleAddNotice = () => {
-    if (newNotice.trim()) {
-      setNotices([newNotice, ...notices]);
-      setNewNotice("");
-    }
-  };
-
-  const handleDeleteNotice = (index: number) => {
-    const updatedNotices = notices.filter((_, i) => i !== index);
-    setNotices(updatedNotices);
-  };
+  ]
 
   return (
     <div className="flex flex-col gap-2 p-2">
@@ -113,12 +148,12 @@ const DashboardDis = () => {
         )}
 
         <ul className="text-sm space-y-2 pl-2">
-          {notices.map((notice, idx) => (
-            <li key={idx} className="flex justify-between m-2">
-              <span className='flex items-center gap-2'><FaPen />{notice}</span>
+          {notices.map((notice) => (
+            <li key={notice.nid} className="flex justify-between m-2">
+              <span className='flex items-center gap-2'><FaPen />{notice.message}</span>
               {isOwner && (
                 <button
-                  onClick={() => handleDeleteNotice(idx)}
+                  onClick={() => handleDeleteNotice(notice.nid)}
                   className="text-red-600 hover:text-red-800 text-xs ml-4 hover:underline cursor-pointer items-end"
                 >
                   Delete

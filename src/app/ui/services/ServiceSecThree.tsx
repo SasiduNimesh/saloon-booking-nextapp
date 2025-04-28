@@ -19,20 +19,21 @@ const ServiceSecThree = () => {
 
         <div className="relative flex flex-col items-center justify-center h-full text-center text-white px-6">
                 
-            <div className="flex items-center space-x-4 mb-4">
+            <div className="flex items-center space-x-4 mb-4" data-aos="fade-left">
                 <div className="w-50 border-t border-dashed border-white"></div>
                   <FaCut size={40} className="rotate-270" />
                 <div className="w-50 border-t border-dashed border-white"></div>
             </div>
         
             <h1 
-            className="text-5xl md:text-7xl font-bold uppercase mt-2">
+            className="text-5xl md:text-7xl font-bold uppercase mt-2" data-aos="fade-right">
                 Our Services
             </h1>
 
             <Link
             href="/book"
-            className="mt-6 px-6 py-3 border border-white text-white uppercase font-semibold tracking-wide transition duration-300 hover:bg-white hover:text-black"
+            className="mt-6 px-6 py-3 border border-white text-white uppercase font-semibold tracking-wide transition duration-300 hover:bg-white hover:text-black" 
+            data-aos="fade-left"
             >
             Book An Appointment
             </Link>

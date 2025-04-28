@@ -1,43 +1,42 @@
-import { Resend } from 'resend';
-import { NextRequest, NextResponse } from 'next/server';
-
-const resend = new Resend(process.env.RESEND_API_KEY);
+import { NextRequest, NextResponse } from "next/server";
+import nodemailer from "nodemailer";
 
 export async function POST(req: NextRequest) {
   const { name, email, message } = await req.json();
 
-  if (!name || !email || !message) {
-    return NextResponse.json({ error: 'Missing fields' }, { status: 400 });
-  }
+  const transporter = nodemailer.createTransport({
+    service: "Gmail",
+    auth: {
+      user: process.env.ADMIN_EMAIL,       
+      pass: process.env.ADMIN_EMAIL_PASS,  
+    },
+  });
 
   try {
-    await resend.emails.send({
-      from: email,
-      to: 'sasindunimeshsnb99@gmail.com',
-      subject: `New Inquiry from ${name}`,
-      html: `
-        <h2>New Message Received</h2>
-        <p><strong>Name:</strong> ${name}</p>
+    await transporter.sendMail({
+      from: `"${name}" <${email}>`,
+      to: process.env.ADMIN_EMAIL,
+      subject: `New message from ${name}`,
+      html: 
+        `<p><strong>Name:</strong> ${name}</p>
         <p><strong>Email:</strong> ${email}</p>
-        <p><strong>Message:</strong><br>${message}</p>
-      `,
+        <p><strong>Message:</strong><br/>${message}</p>`,
     });
 
-    await resend.emails.send({
-      from: 'sasindunimeshsnb99@gmail.com',
+    await transporter.sendMail({
+      from: `Lucky Salon <${process.env.ADMIN_EMAIL}>`,
       to: email,
-      subject: 'Thanks for contacting Lucky Salon!',
+      subject: "Thanks for contacting Lucky Salon!",
       html: `
         <p>Hi ${name},</p>
-        <p>Thank you for reaching out to Lucky Salon. We've received your message and will reply shortly.</p>
-        <p>Have a beautiful day!</p>
-        <p>Lucky Salon Team</p>
+        <p>Thank you for your message! We have received it and will get back to you soon.</p>
+        <p>Lucky Salon</p>
       `,
     });
 
     return NextResponse.json({ success: true });
   } catch (error) {
-    console.error('Email send error:', error);
-    return NextResponse.json({ error: 'Email sending failed' }, { status: 500 });
+    console.error("Email error:", error);
+    return NextResponse.json({ error: "Failed to send email" }, { status: 500 });
   }
 }

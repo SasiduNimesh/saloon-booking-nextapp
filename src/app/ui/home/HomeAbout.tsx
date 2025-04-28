@@ -6,7 +6,7 @@ const HomeAbout = () => {
   return (
     <div className="min-h-screen flex flex-col justify-around gap-8 md:flex-row bg-gray-900 text-white px-6 md:px-16 py-12">
       {/* Left Section */}
-      <div className="flex flex-col space-y-6">
+      <div className="flex flex-col space-y-6" data-aos="flip-left">
         <h1 className="text-4xl font-bold text-amber-600">LUCKY</h1>
 
         <ul className="flex flex-col space-y-4 text-xl font-semibold">
@@ -38,7 +38,7 @@ const HomeAbout = () => {
       </div>
 
       {/* Right Section */}
-      <div className="flex justify-center items-center">
+      <div className="flex justify-center items-center" data-aos="flip-right">
         <Image
             src="/images/aboutImg1.jpg"
             alt="Barber Shop"

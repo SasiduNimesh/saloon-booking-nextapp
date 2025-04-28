@@ -24,20 +24,20 @@ const HomeTestimonial = () => {
       
       <div className="flex items-center justify-center w-full mb-6">
         <div className="border-t-2 border-amber-600 w-1/4"></div>
-        <h2 className="text-4xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-purple-400 via-pink-500 to-red-500">TESTIMONIALS</h2>
+        <h2 className="text-4xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-purple-400 via-pink-500 to-red-500" data-aos="fade-up-right">TESTIMONIALS</h2>
         <div className="border-t-2 border-amber-600 w-1/4"></div>
       </div>
 
       <div className="max-w-3xl text-center">
-        <p className="text-gray-300 text-lg italic mb-4">
+        <p className="text-gray-300 text-lg italic mb-4" data-aos="fade-up-left">
           {testimonials[currentIndex].quote}
         </p>
-        <p className="text-amber-600 font-semibold">
+        <p className="text-amber-600 font-semibold" data-aos="fade-up-right">
           {testimonials[currentIndex].author}
         </p>
       </div>
 
-      <div className="flex space-x-4 mt-6">
+      <div className="flex space-x-4 mt-6" data-aos="fade-up-left">
         <AiOutlineLeftCircle
           size={40}
           onClick={handlePrev}
@@ -48,6 +48,7 @@ const HomeTestimonial = () => {
           size={40}
           onClick={handleNext}
           className="hover:bg-amber-800 hover:scale-125 text-white rounded-full cursor-pointer"
+          data-aos="fade-down"
         />
           
       </div>

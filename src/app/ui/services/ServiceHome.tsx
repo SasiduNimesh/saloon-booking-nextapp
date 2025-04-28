@@ -1,12 +1,24 @@
 'use client'
-import React from "react";
+import React, { useEffect } from "react";
 import Image from "next/image";
 import { FaCut } from "react-icons/fa";
 import Link from "next/link";
 import "./style.css";
-import { motion } from 'framer-motion'
+//import { motion } from 'framer-motion'
+import AOS from "aos";
+import "aos/dist/aos.css"; 
 
 const ServiceHome = () => {
+  useEffect(() => {
+      AOS.init({
+        duration: 800,
+        easing: "ease-in-out",
+        once: false,
+        mirror: true,
+      });
+      AOS.refresh();
+    }, []);
+  
   return (
     <div className="relative w-full h-[500px]">
       <div className="absolute inset-0">
@@ -21,41 +33,31 @@ const ServiceHome = () => {
       </div>
 
       <div className="relative flex flex-col items-center justify-center h-full text-center text-white px-6">
-        <motion.div
+        <div
           className="flex items-center space-x-4 mb-4"
-          initial={{ opacity: 0, y: -30 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.6 }}
-          viewport={{ once: true }}
+          data-aos="fade-in"
         >
           <div className="w-50 border-t border-dashed border-white"></div>
           <FaCut size={40} className="rotate-270" />
           <div className="w-50 border-t border-dashed border-white"></div>
-        </motion.div>
+        </div>
 
-        <motion.h1 
+        <h1 
           className="text-3xl md:text-5xl font-bold uppercase mt-2 diplomata-sc-regular"
-          initial={{ opacity: 0, scale: 0.9 }}
-          whileInView={{ opacity: 1, scale: 1 }}
-          transition={{ duration: 0.6, delay: 0.2 }}
-          viewport={{ once: true }}
+          data-aos="fade-right"
         >
           Our Services
-        </motion.h1>
+        </h1>
 
-        <motion.div
-          initial={{ opacity: 0, y: 30 }}
-          whileInView={{ opacity: 1, y: 30 }}
-          transition={{ duration: 0.6, delay: 0.4 }}
-          viewport={{ once: false , amount:0.2 }}
-        >
+        
           <Link
             href="/book"
+            data-aos="fade-out"
             className="mt-6 px-6 py-3 border border-white text-white uppercase font-semibold tracking-wide transition duration-300 hover:bg-white hover:text-black"
           >
             Book An Appointment
           </Link>
-        </motion.div>
+
         
       </div>
     </div>

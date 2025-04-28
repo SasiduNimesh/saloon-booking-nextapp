@@ -4,10 +4,13 @@ import { useEffect, useState } from "react";
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 import { loadStripe } from '@stripe/stripe-js';
+import { useRouter } from "next/navigation";
 
 const stripePromise = loadStripe(process.env.NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY!);
 
 const AppointmentForm = () => {
+  const router = useRouter();
+
   const [step, setStep] = useState(1);
   const [formData, setFormData] = useState({
     name: "",
@@ -82,13 +85,26 @@ const AppointmentForm = () => {
         const data = await res.json();
         if (res.ok) {
           alert('Appointment booked successfully (Cash).');
+          setFormData({
+            name: "",
+            email: "",
+            mobile: "",
+            dateTime: null,
+            serviceName: "",
+            price: "",
+            paymentMethod: "",
+          });
+          setStep(1);
         } else {
           alert('Failed to book appointment.');
         }
+        
       } catch (err) {
         console.error('Booking error:', err);
       }
-    } else if (formData.paymentMethod === 'Card') {
+    } 
+    
+    else if (formData.paymentMethod === 'Card') {
       try {
         const stripe = await stripePromise;
         const res = await fetch('http://localhost:3000/api/create-checkout-session', {

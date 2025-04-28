@@ -84,7 +84,7 @@ const Report = () => {
           activeView === b.bookingId && (
             <div
               key={`card-${b.bookingId}`}
-              className="absolute bg-white border border-sky-200 p-3 rounded-md shadow-md text-justify right-80 -bottom-3"
+              className="absolute bg-white border border-sky-200 p-3 rounded-md shadow-md text-justify right-80 bottom-3"
             >
               <h3 className="text-md font-semibold text-sky-800 mb-2">Booking Details</h3>
               <div className="space-y-1">

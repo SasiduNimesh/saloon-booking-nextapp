@@ -3,6 +3,13 @@ import CredentialsProvider from "next-auth/providers/credentials";
 import { db } from "@/app/lib/db";
 import bcrypt from "bcrypt";
 
+type DBUser = {
+  userId: number;
+  email: string;
+  password: string;
+  role: "owner" | "customer";
+};
+
 const handler = NextAuth({
   providers: [
     CredentialsProvider({
@@ -16,7 +23,7 @@ const handler = NextAuth({
         if (!email || !password) return null;
 
         const [rows] = await db.query("SELECT * FROM users WHERE email = ?", [email]);
-        const users = rows as any[];
+        const users = rows as DBUser[];
         const user = users[0];
 
         if (!user) return null;

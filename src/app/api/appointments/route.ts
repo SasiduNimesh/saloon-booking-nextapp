@@ -16,7 +16,7 @@ export async function POST(req: NextRequest) {
       pay_status
     } = await req.json();
 
-    const [result] = await db.execute(
+    await db.query(
       `INSERT INTO appointments 
         (cname, cemail, mobileno, service_name, price, app_date, app_time, pay_method, pay_status) 
         VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)`,

@@ -1,3 +1,4 @@
+'use client'
 import React from 'react'
 import Image from 'next/image'
 
@@ -6,7 +7,7 @@ const AboutMission = () => {
     <div className="bg-gradient-to-r from-gray-800 to-sky-900 text-white py-16 px-6 md:px-12">
       <div className="max-w-6xl mx-auto grid grid-cols-1 md:grid-cols-2 gap-12">
         {/* Our Story Side */}
-        <div className="relative hover:scale-105">
+        <div className="relative hover:scale-105" data-aos="zoom-in">
           <Image
             src="/images/aboutImg1.jpg"
             width={500}
@@ -15,7 +16,7 @@ const AboutMission = () => {
             className="rounded-lg"
           />
         </div>
-        <div className="flex flex-col justify-center">
+        <div className="flex flex-col justify-center" data-aos="zoom-in">
           <h2 className="text-3xl font-bold uppercase bg-clip-text text-transparent bg-gradient-to-r from-purple-800 via-pink-500 to-red-700">Our Story</h2>
           <p className="mt-4 text-gray-300">
           Vivamus id gravida mi, nec ullamcorper purus. Suspendisse ut nibh sagittis lacus viverra aliquam. 
@@ -25,7 +26,7 @@ const AboutMission = () => {
         </div>
 
         {/* Our Mission Section */}
-        <div className="flex flex-col justify-center order-2 md:order-1">
+        <div className="flex flex-col justify-center order-2 md:order-1" data-aos="zoom-out">
           <h2 className="text-3xl font-bold uppercase bg-clip-text text-transparent bg-gradient-to-r from-purple-400 via-pink-500 to-red-500">Our Mission</h2>
           <p className="mt-4 text-gray-300">
           Donec ultricies lobortis eros, nec auctor nisl semper ultricies. 
@@ -33,7 +34,7 @@ const AboutMission = () => {
           Aliquam ornare nunc nibh, sit amet porta diam pretium in.
           </p>
         </div>
-        <div className="relative order-1 md:order-2 hover:scale-105">
+        <div className="relative order-1 md:order-2 hover:scale-105" data-aos="zoom-out">
         <Image
             src="/images/tools2.jpg"
             width={500}
