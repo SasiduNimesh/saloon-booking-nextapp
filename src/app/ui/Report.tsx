@@ -1,8 +1,21 @@
 "use client";
 import React, { useEffect, useState } from "react";
 
+type Booking = {
+  bookingId: number;
+  cname: string;
+  cemail: string;
+  mobileno: string;
+  service_name: string;
+  price: number;
+  pay_method: string;
+  app_date: string;
+  app_time: string;
+};
+
+
 const Report = () => {
-  const [bookings, setBookings] = useState<any[]>([]);
+  const [bookings, setBookings] = useState<Booking[]>([]);
   const [activeView, setActiveView] = useState<number | null>(null);
 
   const fetchBookings = async () => {

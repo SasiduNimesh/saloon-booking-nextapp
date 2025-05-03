@@ -6,6 +6,11 @@ import "react-datepicker/dist/react-datepicker.css";
 import { loadStripe } from '@stripe/stripe-js';
 import { useRouter } from "next/navigation";
 
+interface Service {
+  name: string;
+  price: string;
+}
+
 const stripePromise = loadStripe(process.env.NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY!);
 
 const AppointmentForm = () => {
@@ -22,21 +27,34 @@ const AppointmentForm = () => {
     paymentMethod: "",
   });
 
-  const [services, setServices] = useState<any[]>([]);
+  const [services, setServices] = useState<Service[]>([]);
   
-  // Fetch services
   const fetchServices = async () => {
     try {
       const response = await fetch("http://localhost:3000/api/bookService");
-      const data = await response.json();
-      setServices(data.services);
+      const { services } = await response.json();
+      setServices(services);
     } catch (error) {
       console.error("Failed to fetch services:", error);
     }
   };
-
+  
+  const fetchBlockedTimes = async () => {
+    try {
+      const res = await fetch("http://localhost:3000/api/bookMaxTimes");
+      const { bookedTimes } = await res.json();
+      const times: string[] = bookedTimes;
+  
+      const parsed = times.map((t) => new Date(t));
+      setFullyBookedTimes(parsed);
+    } catch (error) {
+      console.error("Failed to fetch fully booked times:", error);
+    }
+  };
+  
   useEffect(() => {
     fetchServices();
+    fetchBlockedTimes();
   }, []);
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
@@ -84,7 +102,20 @@ const AppointmentForm = () => {
 
         const data = await res.json();
         if (res.ok) {
-          alert('Appointment booked successfully (Cash).');
+          await fetch('/api/sendConform', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+              name: formData.name,
+              email: formData.email,
+              service: formData.serviceName,
+              date,
+              time,
+            }),
+          });
+        
+          alert('Appointment booked successfully (Cash). A confirmation email has been sent.');
+        
           setFormData({
             name: "",
             email: "",
@@ -127,25 +158,11 @@ const AppointmentForm = () => {
         console.error('Stripe error:', err);
       }
     }
+
   };
 
-  const mockBookedTimes = [
-    "2025-04-12T10:00",
-    "2025-04-12T10:00", // already 2 people
-    "2025-04-12T12:00",
-  ];
-  
-  // Count how many bookings per time
-  const bookingCountMap = mockBookedTimes.reduce((acc: Record<string, number>, time) => {
-    acc[time] = (acc[time] || 0) + 1;
-    return acc;
-  }, {});
-  
-  // Find times that have reached 2 bookings
-  const fullyBookedTimes = Object.entries(bookingCountMap)
-    .filter(([_, count]) => count >= 2)
-    .map(([time]) => new Date(time));
-  
+  const [fullyBookedTimes, setFullyBookedTimes] = useState<Date[]>([]);
+
   // Time filtering by salon open hours
   const filterTime = (time: Date) => {
     const day = time.getDay(); // 0=Sun, 1=Mon, ..., 6=Sat
